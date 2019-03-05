@@ -1,0 +1,7 @@
+00:00 - 12:25 Introduction to Jupyter, Jeremy's background, world class applications after 7 weeks, false statements.
+12:25 - 17:55 Jumping into the Jupyter notebook.
+17:55 - 48:30 Oxford-IIT Pet Dataset, untar_data, get_image_files & regex, ImageDataBunch, image size, normalising images, inspecting data, downloading weights and validation sets.
+48:30 - 1:05:50 Success stories about alumni & fast.ai.
+1:05:50 - 1:14:45 Why resnet, saving a model, analysing results with a) top_losses,  b) confusion_matrix & c) most_confused.
+1:14:45 - 1:38:15 Finetuning with unfreezing, visualising CNN layers, learning rate, lr_find, max_lr, loading models, different kinds of datasets, fast.ai docs practical examples available as Jupyter notebooks.
+1:38:15 - 1:40:11 More examples of interesting stuff that can be done.
