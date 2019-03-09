@@ -1,7 +1,43 @@
 00:00 - 12:25 Introduction to Jupyter, Jeremy's background, world class applications after 7 weeks, false statements.
 12:25 - 17:55 Jumping into the Jupyter notebook.
 17:55 - 48:30 Oxford-IIT Pet Dataset, untar_data, get_image_files & regex, ImageDataBunch, image size, normalising images, inspecting data, downloading weights and validation sets.
+		dataprocess
+				def fun(url:str) -> str 描述入参及返回值类型
+			path = untar_data(URL)
+			path.ls()
+			path_data = path/'?'
+			fnames = get_image_files(path_data)
+			np.random.seed(2)
+			pat = re.compile("..")
+			data = ImageDataBunch.from_name_re(datapath, filenames, pat ,ds_tfms=get_transforms(), size = 224, bs = bs, numworkers = 0).normalize(imagenet_stats)
+				data默认分两类，训练集，测试集  验证集可选
+			data.classes / data.c(len(data.classes))
+			
+		train module
+			
+			learn = ConvLearner(data,model,metrics)
+			learn.fit_one_cycle()  > learn.fit()
+			
+			
 48:30 - 1:05:50 Success stories about alumni & fast.ai.
 1:05:50 - 1:14:45 Why resnet, saving a model, analysing results with a) top_losses,  b) confusion_matrix & c) most_confused.
+
+		resnet
+			best cnn
+		save
+			learn.save('name')
+		
+		interpretation
+			interp = ClassificationInterpretation.from_learner(learn)
+			interp.plot_top_losses(num,fig,...)
+				doc()
+			interp.most_confused(min_val = )/(interp.plot_confustion_matrix(fig,...))
+			
 1:14:45 - 1:38:15 Finetuning with unfreezing, visualising CNN layers, learning rate, lr_find, max_lr, loading models, different kinds of datasets, fast.ai docs practical examples available as Jupyter notebooks.
+
+		learnrate_find
+			learn.lr_find()
+			learn.recorder.plot()
+			
+		find label from different way
 1:38:15 - 1:40:11 More examples of interesting stuff that can be done.
