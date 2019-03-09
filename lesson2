@@ -1,17 +1,34 @@
-0-5.08 用官方平台用例，有问题去论坛
-5.09-12.32 应用举例
-12.33-14.00 后续课程介绍 NLP CV Tabular Col Emb CV deepdive NLP deepdive
-14.01-16.17 keep going
-16.18-29.52 下载/分类/训练
-29.53-35.06 去除噪声 cleaning up
-35.07-37.39 ipywidgets 插件介绍
-37.40-38.30 重新训练 提出目前的困难在于处理bias数据
-38.31-41.15 用cpu训练的方法
-41.16-45.45 将模型应用到预测的方法
-46.50-53.39 解决问题模型 learning rate / Number of epochs
-53.40-1.01.27 图像识别原理 回答问题
-1.02.0-1.37.00 创建判别函数的原理 拟合函数 y向量 = Xa向量 
-					stochastic gradient descent / tensor / loss / mean squared error MES  = ((y - y_hat)**2).mean()
+0 - 5.08 用官方推荐的平台，有问题去论坛
+
+5.09 - 12.32 应用举例
+12.33 - 14.00 后续课程介绍 NLP CV Tabular Col Emb CV deepdive NLP deepdive
+14.01 - 16.17 keep going
+16.18 - 29.52 下载/分类/训练
+		
+		creating own dataset form google images —— how to create a deep learning dataset using Google Images
+			get a list of URLs
+				js
+				dataprocess 见lession 1
+				create_cnn <-> ConvLearner
+
+29.53 - 35.06 去除噪声 
+
+		from fastai.widgets import *
+		cleaning up	
+			losses, idxs = interp.top_losses()
+			top_loss_paths = data.valid_ds.x[idxs]
+			fd = FiledDeleter(path)
+			
+35.07 - 38.30 ipywidgets 插件介绍, 重新训练 提出目前的困难在于处理bias数据
+38.31 - 41.15 用cpu训练的方法
+		
+		fastai.defaults.device = torch.device('cpu')
+		
+41.16 - 45.45 将模型应用到预测的方法
+46.50 - 53.39 解决问题模型 learning rate / Number of epochs
+53.40 - 1.01.27 图像识别原理 回答问题
+1.02.0 - 1.37.00 创建判别函数的原理 拟合函数 y向量 = Xa向量 
+					stochastic gradient descent / tensor / loss / mean squared error MES  = ((y  -  y_hat)**2).mean()
 					回答问题: 1.数据集过小 2.bias数据集 3.下降过慢时多训练还是每次训练时间更长 4.creat0cnn resnet34是否下载参数
-1.37.01-1.49.40 gradient descent
-1.49.41-end Vocab
+1.37.01 - 1.49.40 gradient descent
+1.49.41 - end Vocab
