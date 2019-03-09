@@ -1,3 +1,9 @@
+几种查看帮助的办法
+1. help(fun)
+2. ??(fun)
+3. doc(fun)
+4.shift+tab
+
 00:00 - 12:25 Introduction to Jupyter, Jeremy's background, world class applications after 7 weeks, false statements.
 12:25 - 17:55 Jumping into the Jupyter notebook.
 17:55 - 48:30 Oxford-IIT Pet Dataset, untar_data, get_image_files & regex, ImageDataBunch, image size, normalising images, inspecting data, downloading weights and validation sets.
