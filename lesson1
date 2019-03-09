@@ -18,7 +18,7 @@
 			data = ImageDataBunch.from_name_re(datapath, filenames, pat ,ds_tfms=get_transforms(), size = 224, bs = bs, numworkers = 0).normalize(imagenet_stats)
 				data默认分两类，训练集，测试集  验证集可选
 			data.classes / data.c(len(data.classes))
-			
+			data.show_batch(rows,figsize..)
 		train module
 			
 			learn = ConvLearner(data,model,metrics)
