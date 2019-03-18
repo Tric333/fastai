@@ -24,9 +24,24 @@
 		
 		fastai.defaults.device = torch.device('cpu')
 		
-41.16 - 45.45 将模型应用到预测的方法
-46.50 - 53.39 解决问题模型 learning rate / Number of epochs
-53.40 - 1.01.27 图像识别原理 回答问题
+41.16 - 45.45 将模型应用到预测的方法 / create web app
+
+		pred_class,pred_idx,outputs = learn.predict(img)
+		pred_class
+
+46.50 - 53.39 可能存在的问题 learning rate / Number of epochs
+
+		learning rate too high -> valid_loss too high  需要重建模型
+		              too low  -> error_rate 下降很慢
+								  train_loss > valid_loss
+								learn.recorder.plot_losses()
+								
+		too few epochs
+								train_loss > valid_loss
+		
+		过拟合的表现: error_rate 先变小后变大
+		
+53.40 - 1.01.27 图像识别原理 回答问题 1、准确度 2、为何用e-5作为默认的learning_rate
 1.02.0 - 1.37.00 创建判别函数的原理 拟合函数 y向量 = Xa向量 
 					stochastic gradient descent / tensor / loss / mean squared error MES  = ((y  -  y_hat)**2).mean()
 					回答问题: 1.数据集过小 2.bias数据集 3.下降过慢时多训练还是每次训练时间更长 4.creat0cnn resnet34是否下载参数
