@@ -1,7 +1,7 @@
 0.00-9.22建立web应用/app应用 替代工作
-9.23-1.00.26 学习多种模型
-	1/亚马逊森林卫星数据 多标签分类
-		介绍安装 kaggle 数据集
+9.23-14.50  介绍安装 kaggle 数据集
+14.50-26.41 
+	1/databunch与pytorch数据结构介绍 创建databunch数据结构
 		
 		创建df
 			df = pd.read_csv(path...)
@@ -12,8 +12,25 @@
 			DataLoader - 组织dataset为batch送至GPU (dataset,batch_size)
 			
 			DataBunch - fastai 数据结构  DataBunch(tarin_dl:DataLoader, valid_dl:DataLoader...)
-			
-		标准流程
+		
+		综合流程	以https://docs.fast.ai/vision.data.html#ImageDataBunch 为准
+			data = ImageDataBunch.from_csv
+		分解流程	以https://docs.fast.ai/data_block.html 为准
+					1/指定data目录
+					2/区分数据集 测试/验证
+					3/指定data对应label
+					4/变换为指定的数据形状
+					5/转换为DataBunch数据
+			data = (ImageList.from_folder(path) #Where to find the data? -> in path and its subfolders
+					.split_by_folder()              #How to split in train/valid? -> use the folders
+					.label_from_folder()            #How to label? -> depending on the folder of the filenames
+					.add_test_folder()              #Optionally add a test set (here default name is test)
+					.transform(tfms, size=64)       #Data augmentation? -> use tfms with a size of 64
+					.databunch())                   #Finally? -> use the defaults for conversion to ImageDataBunch
+
+26.41-  
+	1/亚马逊森林卫星数据 多标签分类
+
 	2/图形分割
 		将图形用相同数字标记
 		下载已标记的图形集学习
@@ -31,4 +48,3 @@
 		imagee points
 	
 	4/NLP IMDB
-		
