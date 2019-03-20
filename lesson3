@@ -1,8 +1,18 @@
 0.00-9.22建立web应用/app应用 替代工作
 9.23-1.00.26 学习多种模型
 	1/亚马逊森林卫星数据 多标签分类
-		介绍安装 kaggle
+		介绍安装 kaggle 数据集
+		
+		创建df
+			df = pd.read_csv(path...)
 		data block API
+			DataSet - pytorch 数据结构
+				包含 __getitem__  实现item[i]
+					 __len__  实现 len(item)
+			DataLoader - 组织dataset为batch送至GPU (dataset,batch_size)
+			
+			DataBunch - fastai 数据结构  DataBunch(tarin_dl:DataLoader, valid_dl:DataLoader...)
+			
 		标准流程
 	2/图形分割
 		将图形用相同数字标记
