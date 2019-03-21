@@ -60,19 +60,17 @@
 		   learn.recorder.plot()
 		   lr = ..
 		
-		# 训练模型
+		# 训练并保存模型
 		5/ learn.fit_one_cycle(n, slice(lr))
-		
+		   learn.save('stage-1-rn50')
+
 		
 	42.00 回答问题1/是否使用错误数据来增强模型 —— 记录并进行自动或手动微调
 				  2/data block 原理 使用顺序 —— 见26.41
 				  3/数据源推荐 未听懂
 
-		# 保存源模型
-		6/ learn.save('stage-1-rn50')
-		
 		# 训练所有cnn层
-		7/ learn.unfreeze()
+		6/ learn.unfreeze()
 		   learn.lr_find()
 		   learn.recorder.plot()
 		   learn.fit_one_cycle(5, slice(1e-5, lr/5))  # 此处可以用包含错误数据的新数据集训练  第二个参数一般选 freeze的 1/5 或 1/10
@@ -87,7 +85,7 @@
 			2/ 128 数据集为原来的1/4大小且已经足够好
 			
 		# 调优
-		8/  data = (src.transform(tfms, size=256)
+		7/  data = (src.transform(tfms, size=256)
 					.databunch(num_workers=0).normalize(imagenet_stats))
 
 			learn.data = data #更改源数据集
