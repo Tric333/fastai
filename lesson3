@@ -85,7 +85,7 @@
 			learn.lr_find()
 			learn.recorder.plot()
 			
-			lr=1e-2/2
+			lr=...
 			learn.fit_one_cycle(5, slice(lr))
 			learn.save('stage-1-256-rn50')
 			
