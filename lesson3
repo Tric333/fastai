@@ -27,11 +27,75 @@
 					.add_test_folder()              #Optionally add a test set (here default name is test)
 					.transform(tfms, size=64)       #Data augmentation? -> use tfms with a size of 64
 					.databunch())                   #Finally? -> use the defaults for conversion to ImageDataBunch
+					
+26.41-56.33 通用流程举例 1/亚马逊森林卫星数据 多标签分类
 
-26.41-  
-	1/亚马逊森林卫星数据 多标签分类
+	29.00使用 api 快速再jupyter notebook内运行代码
+	
+		用例流程  ps: 代码变动很快
+		30.21 - 入参介绍
+		
+		1/ src = (ImageFileList.from_folder(path)	# 将src 与 data 分割的原因在于 实际使用的数据集data一般为src的transform 后续修改transform后 src不变，但data改变
+					.split_by_rand_pct(0.2)
+					.label_from_df(label_delim=' '))
+					
+		2/ tfms = get_transforms(flip_vert = ...)
+		   data = (src.datasets()
+					.transform(tfms, size = )
+					.databunch().normalize(imagenet_stats))
+	
+		3/ arch = model.sresnet50
+		   acc_02 = partial(accuracy_thresh, thresh=0.2) # 创建入参thresh为 0.2 的 accuracy_thresh 函数模板 下同
+		   f_score = partial(fbeta, thresh=0.2) #此处thresh 为可能标签的门限概率，高于该门限都认为是标签 fbeta() f_score函数
+		   learn = create_cnn(data,arch,metrics=[acc_02, f_score])   
+		   
+		4/ learn.lr_find()
+		   learn.recorder.plot()
+		   lr = ..
+		   
+		5/ learn.fit_one_cycle(n, slice(lr))
+		
+		
+	42.00 回答问题1/是否使用错误数据来增强模型 —— 记录并进行自动或手动微调
+				  2/data block 原理 使用顺序 —— 见26.41
+				  3/数据源推荐 未听懂
 
-	2/图形分割
+		6/ learn.save('stage-1-rn50')
+		
+		7/ learn.unfreeze()
+		   learn.lr_find()
+		   learn.recorder.plot()
+		   learn.fit_one_cycle(5, slice(1e-5, lr/5))  # 此处可以用包含错误数据的新数据集训练  第二个参数一般选 freeze的 1/5 或 1/10
+		
+			data.c
+			data.classes
+	
+	50.54 refine
+	
+		为何一开始 transform size不用256
+			1/ 256极有可能过拟合
+			2/ 128 数据集为原来的1/4大小且已经足够好
+			
+		8/  data = (src.transform(tfms, size=256)
+					.databunch(num_workers=0).normalize(imagenet_stats))
+
+			learn.data = data #更改源数据集
+			data.train_ds[0][0].shape #查看数据集
+			learn.freeze()	#只训练最后几层
+			learn.lr_find()
+			learn.recorder.plot()
+			
+			lr=1e-2/2
+			learn.fit_one_cycle(5, slice(lr))
+			learn.save('stage-1-256-rn50')
+			
+			learn.unfreeze()
+			learn.fit_one_cycle(5, slice(1e-5, lr/5))
+			learn.recorder.plot_losses()
+			learn.save('stage-2-256-rn50')
+
+56.33- 通用流程举例 2/图形分割 Camvid用例
+	
 		将图形用相同数字标记
 		下载已标记的图形集学习
 
@@ -48,3 +112,11 @@
 		imagee points
 	
 	4/NLP IMDB
+
+
+note:
+		查看 lr_find 图形中 loss 和 learning rate 关系
+vocabulary
+	Discriminative model 判别模型
+	Generative model 生成模型
+	Transfer learning 迁移学习
