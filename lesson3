@@ -34,25 +34,33 @@
 	
 		用例流程  ps: 代码变动很快
 		30.21 - 入参介绍
-		
+		# 源数据获取及处理
+		0/ path = untar_data()
+		   path.ls()
+		   
+		# 获取数据的标签及源数据地址
 		1/ src = (ImageFileList.from_folder(path)	# 将src 与 data 分割的原因在于 实际使用的数据集data一般为src的transform 后续修改transform后 src不变，但data改变
 					.split_by_rand_pct(0.2)
 					.label_from_df(label_delim=' '))
-					
+		
+		# 变换为所需databunch
 		2/ tfms = get_transforms(flip_vert = ...)
 		   data = (src.datasets()
 					.transform(tfms, size = )
 					.databunch().normalize(imagenet_stats))
 	
+		# 创建learn
 		3/ arch = model.sresnet50
 		   acc_02 = partial(accuracy_thresh, thresh=0.2) # 创建入参thresh为 0.2 的 accuracy_thresh 函数模板 下同
 		   f_score = partial(fbeta, thresh=0.2) #此处thresh 为可能标签的门限概率，高于该门限都认为是标签 fbeta() f_score函数
 		   learn = create_cnn(data,arch,metrics=[acc_02, f_score])   
-		   
+		
+		# learn参数确定
 		4/ learn.lr_find()
 		   learn.recorder.plot()
 		   lr = ..
-		   
+		
+		# 训练模型
 		5/ learn.fit_one_cycle(n, slice(lr))
 		
 		
@@ -60,8 +68,10 @@
 				  2/data block 原理 使用顺序 —— 见26.41
 				  3/数据源推荐 未听懂
 
+		# 保存源模型
 		6/ learn.save('stage-1-rn50')
 		
+		# 训练所有cnn层
 		7/ learn.unfreeze()
 		   learn.lr_find()
 		   learn.recorder.plot()
@@ -76,6 +86,7 @@
 			1/ 256极有可能过拟合
 			2/ 128 数据集为原来的1/4大小且已经足够好
 			
+		# 调优
 		8/  data = (src.transform(tfms, size=256)
 					.databunch(num_workers=0).normalize(imagenet_stats))
 
