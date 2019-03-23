@@ -151,8 +151,35 @@
 			data.show_batch(rows=3, figsize=(12,9)) #观察数据 测试集
 			data.show_batch(2, figsize=(10,7), ds_type=DatasetType.Valid) # 验证集
 			
-		3/
+		3/ 增加创建metrics评分模型的示例
+			name2id = {v:k for k,v in enumerate(codes)}
+			void_code = name2id['Void']
+
+			def acc_camvid(input, target):
+				target = target.squeeze(1)
+				mask = target != void_code
+				return (input.argmax(dim=1)[mask]==target[mask]).float().mean()
+				
+			metrics=acc_camvid
+			wd=1e-2
+			learn = unet_learner(data, models.resnet34, metrics=metrics, wd=wd)
 		
+		4/
+			lr_find(learn)
+			learn.recorder.plot()
+			lr=3e-3
+		
+		5/
+			learn.fit_one_cycle(10, slice(lr), pct_start=0.9)
+			learn.save('stage-1')
+			learn.show_results(rows=3, figsize=(8,9))
+			
+		6/
+			learn.unfreeze()
+			lrs = slice(lr/400,lr/4)
+			learn.fit_one_cycle(12, lrs, pct_start=0.8)
+			
+		7/
 		60.27-63.06 回答问题 lr选择是否能直接返回最优入参 —— 目前不行
 
 
