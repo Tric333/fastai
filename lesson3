@@ -151,7 +151,7 @@
 			data.show_batch(rows=3, figsize=(12,9)) #观察数据 测试集
 			data.show_batch(2, figsize=(10,7), ds_type=DatasetType.Valid) # 验证集
 			
-		3/ 增加创建metrics评分模型的示例
+		3/ 增加创建metrics评分模型的示例 70:00
 			name2id = {v:k for k,v in enumerate(codes)}
 			void_code = name2id['Void']
 
@@ -164,6 +164,8 @@
 			wd=1e-2
 			learn = unet_learner(data, models.resnet34, metrics=metrics, wd=wd)
 		
+		75:03 回答问题 模型training loss 比 validation loss 大时应该如何处理
+					—— 出现这种情况说明underfitting,可以1/训练时间更长 2/选择更大的learning rate 3/减少regularization  L1 & L2 Dropout (L2 又称weight decay权重衰减)
 		4/
 			lr_find(learn)
 			learn.recorder.plot()
@@ -171,6 +173,15 @@
 		
 		5/
 			learn.fit_one_cycle(10, slice(lr), pct_start=0.9)
+			
+			
+		79.00 讲解fit_one_cycle 与 训练/验证 loss, weights, learning rate 的关系
+				#损失函数一般会先上升后下降，其原因为learning rate 会先上升后下降
+				#此现象为 fit_one_cycle 所实现的 这是一个比较好的主意，在训练过程中尽量体现，若未出现可以适当增加lr
+				#不同lr 会有不同的学习现象，一般在训练初期，需要较大的lr使得遍历整个训练曲线，但在训练后期，较小的lr更容易收敛到最佳点
+				#在调用fit_one_cycle函数传入lr时，该lr指的是最大的learning rate
+				#learn.recorder.plot_losses() #画出训练损失图
+				#learn.reocrder.plot_lr()
 			learn.save('stage-1')
 			learn.show_results(rows=3, figsize=(8,9))
 			
@@ -178,27 +189,36 @@
 			learn.unfreeze()
 			lrs = slice(lr/400,lr/4)
 			learn.fit_one_cycle(12, lrs, pct_start=0.8)
+			learn.show_results()
 			
-		7/
+		else/
+			当GPU RAM较小时，可以用16位的浮点运算代替32位的 或者减小batch size 
+			learn = Learner.creat_unet(data, models.resnet34,metrics=metrics).to_fp16()#需要用最新的CUDA驱动或最新的GPU
+			
 		60.27-63.06 回答问题 lr选择是否能直接返回最优入参 —— 目前不行
 
 
-		1.09.01- 回答问题
-				介绍unit技术
-				介绍lr/weights选取技巧
+94.00-
 
-1.33.00-
-	3/回归 BIWI head pose
-		imagee points
+	3/回归 BIWI head pose. to find the center of face
 	
-	4/NLP IMDB
+		image points x,y axis
+		regression model —— 输出为连续数值或 a set of numbers
+		loss function 衡量模型好坏 —— 此例使用MESLossFlat() mean squared error
+		
+	4/NLP IMDB —— 文本分析
 
+		from fastai.text import * #不用 fastai.vision
+		
+		训练两个模型 一个语言模型，一个预测模型
 
+	106.50 回答问题
 note:
 		查看 lr_find 图形中 loss 和 learning rate 关系
 		学习pandas numpy 等常用操作
 		可在course.fast.ai/datasets 下载数据源
 vocabulary
+	Weights 权重值 也即 y=ax 中的 a
 	Discriminative model 判别模型
 	Generative model 生成模型
 	Transfer learning 迁移学习
